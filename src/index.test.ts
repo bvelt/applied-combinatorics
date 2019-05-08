@@ -25,14 +25,14 @@ describe("numberOfPermutations", () => {
     expect(() => comb.numberOfPermutations(-1)).toThrow();
     expect(() => comb.numberOfPermutations(1, -1)).toThrow();
   });
-  it("number of permutations with repitition is equal to numberOfElements^numberOfSlots", () => {
+  it("number of permutations without replacement P(n, r) is equal to n!/(n - r)!", () => {
+    expect(comb.numberOfPermutations(4, 3, false)).toEqual(comb.factorial(4) / comb.factorial(4 - 3));
+  });
+  it("number of permutations with replacement Pr(n, r) is equal to n^r", () => {
     expect(comb.numberOfPermutations(2, 3)).toEqual(2 ** 3);
   });
   it("throws error if elements cannot repeat and number of slots is greater than number of elements", () => {
     expect(() => comb.numberOfPermutations(3, 4, false)).toThrow();
-  });
-  it("number of permutations without repitition is equal to numberOfElements!/(numberOfElements - numberOfSlots)!", () => {
-    expect(comb.numberOfPermutations(4, 3, false)).toEqual(comb.factorial(4) / comb.factorial(4 - 3));
   });
 });
 
@@ -53,11 +53,14 @@ describe("numberOfCombinations", () => {
     expect(() => comb.numberOfCombinations(-1, 4)).toThrow();
     expect(() => comb.numberOfCombinations(4, -1)).toThrow();
   });
-  it("throws error if size is greater than number of elements", () => {
-    expect(() => comb.numberOfCombinations(3, 4)).toThrow();
+  it("throws error if elements cannot repeat and size is greater than number of elements", () => {
+    expect(() => comb.numberOfCombinations(3, 4, false)).toThrow();
   });
-  it("number of combinations is equal to n!/r!(n-r)!", () => {
-    expect(comb.numberOfCombinations(4, 3)).toEqual(4);
+  it("number of combinations C(n, r) without replacement is equal to n!/r!(n-r)!", () => {
+    expect(comb.numberOfCombinations(4, 3, false)).toEqual(4);
+  });
+  it("number of combinations with replacement Cr(n, r) is equal to C(n + r - 1, r)", () => {
+    expect(comb.numberOfCombinations(4, 3, true)).toEqual(comb.numberOfCombinations(4 + 3 - 1, 3, false));
   });
 });
 
@@ -81,13 +84,13 @@ describe("enumeratePermutations", () => {
     expect(() => comb.enumeratePermutations(elements, 5, false)).toThrow();
     expect(() => comb.enumeratePermutations(elements.concat(elements), 5, false)).toThrow();
   });
-  it("enumerates permutations with repititions of correct size", () => {
+  it("enumerates permutations with replacements of correct size", () => {
     const permutations = comb.enumeratePermutations(elements);
     const size = comb.numberOfPermutations(elements.length);
     //console.log(permutations);
     expect(permutations.length).toEqual(size);
   });
-  it("enumerates permutations without repititions of correct size", () => {
+  it("enumerates permutations without replacements of correct size", () => {
     const permutations = comb.enumeratePermutations(elements, elements.length, false);
     const size = comb.numberOfPermutations(elements.length, elements.length, false);
     //console.log(permutations);
@@ -111,26 +114,32 @@ describe("enumerateSubsets", () => {
 
 describe("enumerateCombinations", () => {
   const elements = ['a', 'b', 'c'];
-  it("returns original set when size is equal to size of elements", () => {
-    const subsets = comb.enumerateCombinations(elements, elements.length);
+  it("returns original set when size is equal to size of elements and elements cannot repeat", () => {
+    const subsets = comb.enumerateCombinations(elements, elements.length, false);
     //console.log(subsets);
     expect(subsets).toEqual([elements]);
   });
-  it("does not repeat elements with subset size less than size of elements", () => {
-    const subsets = comb.enumerateCombinations(elements, 2);
+  it("does not repeat elements when replacement is not allowed", () => {
+    const subsets = comb.enumerateCombinations(elements, 2, false);
     //console.log(subsets);
     expect(subsets).toEqual([['a', 'b'], ['a', 'c'], ['b', 'c']]);
   });
+  it("repeats elements when replacement is allowed", () => {
+    const subsets = comb.enumerateCombinations(elements, 2, true);
+    //console.log(subsets);
+    expect(subsets.length).toEqual(comb.numberOfCombinations(elements.length, 2, true));
+    expect(subsets).toEqual([['a', 'a'], ['a', 'b'], ['a', 'c'], ['b', 'b'], ['b', 'c'], ['c', 'c']]);
+  });
   it("returns empty set if size is equal to zero", () => {
-    const subsets = comb.enumerateCombinations(elements, 0);
+    const subsets = comb.enumerateCombinations(elements, 0, false);
     expect(subsets).toEqual([[]]);
   });
   it("throws error if size is negative", () => {
     expect(() => comb.enumerateCombinations(elements, -1)).toThrow();
   });
-  it("throws error if size is greater than number of elements", () => {
-    expect(() => comb.enumerateCombinations(elements, 5)).toThrow();
-    expect(() => comb.enumerateCombinations(elements.concat(elements), 5)).toThrow();
+  it("throws error if size is greater than number of elements and elements cannot repeat", () => {
+    expect(() => comb.enumerateCombinations(elements, 5, false)).toThrow();
+    expect(() => comb.enumerateCombinations(elements.concat(elements), 5, false)).toThrow();
   });
 });
 
