@@ -1,0 +1,42 @@
+{
+  "name": "combinatorics",
+  "version": "1.0.0",
+  "description": "Combinatorics library",
+  "main": "./build/index.js",
+  "typings": "./build/index.d.ts",
+  "scripts": {
+    "prepare": "npm run build",
+    "build": "tsc",
+    "test": "jest --watch"
+  },
+  "files": [
+    "build"
+  ],
+  "jest": {
+    "preset": "ts-jest",
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "testRegex": "^.+\\.test\\.ts$",
+    "setupFiles": [
+      "core-js"
+    ]
+  },
+  "keywords": [],
+  "author": "Brent Velthoen",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^24.0.12",
+    "jest": "^24.8.0",
+    "ts-jest": "^24.0.2",
+    "typescript": "^3.4.5"
+  },
+  "dependencies": {
+    "core-js": "^3.0.1",
+    "tslib": "^1.9.3"
+  }
+}
