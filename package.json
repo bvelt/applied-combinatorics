@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Combinatorics library",
   "main": "./build/index.js",
-  "typings": "./build/index.d.ts",
+  "types": "./build/index.d.ts",
   "scripts": {
     "prepare": "npm run build",
     "build": "tsc",
@@ -26,7 +26,7 @@
       "core-js"
     ]
   },
-  "keywords": [],
+  "keywords": ["combinatorics", "typescript"],
   "author": "Brent Velthoen",
   "license": "MIT",
   "devDependencies": {
