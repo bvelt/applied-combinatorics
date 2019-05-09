@@ -143,3 +143,59 @@ describe("enumerateCombinations", () => {
   });
 });
 
+describe("grayCodeOrder", () => {
+  it("throws error if length is less than 1", () => {
+    expect(() => comb.grayCodeOrder(0)).toThrow();
+  });
+  it("generates first gray code order correctly", () => {
+    expect(comb.grayCodeOrder(1)).toEqual([[0], [1]]);
+  });
+  it("generates second gray code order correctly", () => {
+    const result = comb.grayCodeOrder(2);
+    //console.log(result);
+    expect(result).toEqual([[0, 0], [0, 1], [1, 1], [1, 0]]);
+  });
+  it("generates third gray code order correctly", () => {
+    const actual = comb.grayCodeOrder(3);
+    const expected = [[0, 0, 0],
+    [0, 0, 1],
+    [0, 1, 1],
+    [0, 1, 0],
+    [1, 1, 0],
+    [1, 1, 1],
+    [1, 0, 1],
+    [1, 0, 0]];
+    //console.log(actual);
+    expect(actual).toEqual(expected);
+  });
+});
+
+describe("grayCodeOrderHavingOnes", () => {
+  it("throws error if numberOfOnes is less than 0", () => {
+    expect(() => comb.grayCodeOrderHavingOnes(4, -1)).toThrow();
+  });
+  it("throws error if numberOfOnes is greater than length of code", () => {
+    expect(() => comb.grayCodeOrderHavingOnes(4, 5)).toThrow();
+  });
+  it("generates third gray code order with number of ones correctly", () => {
+    const order = [[0, 0, 0], // 0
+    [0, 0, 1], // 1
+    [0, 1, 1], // 2
+    [0, 1, 0], // 3
+    [1, 1, 0], // 4
+    [1, 1, 1], // 5
+    [1, 0, 1], // 6
+    [1, 0, 0]]; // 7
+    const expected = [
+      [order[0]], // 0 1's
+      [order[1], order[3], order[7]], // 1 1's
+      [order[2], order[4], order[6]], // 2 1's
+      [order[5]] // 3 1's
+    ];
+    for (let i = 0; i < 3; i++) {
+      const actual = comb.grayCodeOrderHavingOnes(3, i);
+      //console.log(actual);
+      expect(actual).toEqual(expected[i]);
+    }
+  })
+});

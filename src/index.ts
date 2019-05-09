@@ -157,3 +157,38 @@ export function enumerateCombinations<T>(elements: T[],
   }
   return levels[sizeOfCombination - 1];
 }
+
+export function grayCodeOrder(length: number = 1): number[][] {
+  if (length < 1) {
+    throw new Error(`Gray code order of length ${length} undefined`);
+  }
+  let levels = new Array<Array<Array<number>>>();
+  for (let i = 0; i < length; i++) {
+    let level = new Array<Array<number>>();
+    if (i === 0) {
+      level.push([0]);
+      level.push([1]);
+    }
+    else {
+      const prev = levels[i - 1];
+      for (let j = prev.length - 1; j >= 0; j--) {
+        level.unshift([0].concat(prev[j]));
+        level.push([1].concat(prev[j]));
+      }
+    }
+    levels.push(level);
+  }
+  return levels[length - 1];
+}
+
+export function grayCodeOrderHavingOnes(length: number, numberOfOnes: number) {
+  if (numberOfOnes < 0) {
+    throw new Error(`Number of ones ${numberOfOnes} must be greater than or equal to zero`);
+  }
+  if (numberOfOnes > length) {
+    throw new Error(`Number of ones ${numberOfOnes} must be less than or equal to length of code ${length}`);
+  }
+  return grayCodeOrder(length).filter(code => {
+    return code.reduce((xs, x) => xs + x) === numberOfOnes;
+  });
+}
