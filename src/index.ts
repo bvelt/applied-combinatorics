@@ -1,29 +1,30 @@
-export function factorial(a: number): number {
-  if (a < 0) {
-    throw new Error(`Factorial of negative number ${a} is not defined`);
+export function factorial(n: number): number {
+  if (n < 0) {
+    throw new Error(`Factorial of negative number ${n} is not defined`);
   }
-  if (a === 0 || a === 1) {
-    return 1;
+  let result = 1;
+  for (let i = n; i > 1; i--) {
+    result *= i;
   }
-  return a * factorial(a - 1);
+  return result;
 }
 
 export function numberOfPermutations(numberOfElements: number,
-  numberOfSlots: number = numberOfElements,
+  length: number = numberOfElements,
   withReplacement: boolean = true): number {
   if (numberOfElements < 0) {
     throw new Error(`Number of elements must be greater than or equal to 0. Received ${numberOfElements}.`);
   }
-  if (numberOfSlots < 0) {
-    throw new Error(`Number of slots must be greater than or equal to 0. Received ${numberOfSlots}.`);
+  if (length < 0) {
+    throw new Error(`Length of permutation must be greater than or equal to 0. Received ${length}.`);
   }
   if (withReplacement) {
-    return numberOfElements ** numberOfSlots;
+    return numberOfElements ** length;
   }
-  if (numberOfSlots > numberOfElements) {
-    throw new Error(`Number of slots ${numberOfSlots} must be greater than or equal to number of elements ${numberOfElements} if elements cannot repeat`);
+  if (length > numberOfElements) {
+    throw new Error(`Length of permutation ${length} must be greater than or equal to number of elements ${numberOfElements} if elements cannot repeat`);
   }
-  return factorial(numberOfElements) / factorial(numberOfElements - numberOfSlots);
+  return factorial(numberOfElements) / factorial(numberOfElements - length);
 }
 
 export function numberOfSubsets(numberOfElements: number, allowEmptySet: boolean = true): number {
@@ -38,19 +39,19 @@ export function numberOfSubsets(numberOfElements: number, allowEmptySet: boolean
 }
 
 export function numberOfCombinations(numberOfElements: number,
-  sizeOfCombination: number = numberOfElements,
+  length: number = numberOfElements,
   withReplacement: boolean = true): number {
   if (numberOfElements < 0) {
     throw new Error(`Number of elements must be greater than or equal to 0. Received ${numberOfElements}.`);
   }
-  if (sizeOfCombination < 0) {
-    throw new Error(`Size of combination must be greater than or equal to 0. Received ${sizeOfCombination}.`);
+  if (length < 0) {
+    throw new Error(`Length of combination must be greater than or equal to 0. Received ${length}.`);
   }
-  if (!withReplacement && sizeOfCombination > numberOfElements) {
-    throw new Error(`Size of combinations ${sizeOfCombination} must be greater than or equal to number of elements ${numberOfElements} if elements cannot repeat`);
+  if (!withReplacement && length > numberOfElements) {
+    throw new Error(`Length of combination ${length} must be greater than or equal to number of elements ${numberOfElements} if elements cannot repeat`);
   }
-  const n = withReplacement ? numberOfElements + sizeOfCombination - 1 : numberOfElements;
-  return factorial(n) / (factorial(sizeOfCombination) * factorial(n - sizeOfCombination));
+  const n = withReplacement ? numberOfElements + length - 1 : numberOfElements;
+  return factorial(n) / (factorial(length) * factorial(n - length));
 }
 
 export function distinctElements<T>(elements: T[]): T[] {
@@ -64,17 +65,17 @@ export function distinctElements<T>(elements: T[]): T[] {
 }
 
 export function enumeratePermutations<T>(elements: T[],
-  numberOfSlots: number = elements.length,
+  length: number = elements.length,
   withReplacement: boolean = true): T[][] {
-  if (numberOfSlots < 0) {
-    throw new Error(`Number of slots must be greater than or equal to 0. Received ${numberOfSlots}.`);
+  if (length < 0) {
+    throw new Error(`Length of permutation must be greater than or equal to 0. Received ${length}.`);
   }
   const distinct = distinctElements(elements);
-  if (!withReplacement && numberOfSlots > distinct.length) {
-    throw new Error(`Number of slots ${numberOfSlots} must be greater than or equal to number of distinct elements ${distinct.length} if elements cannot repeat`);
+  if (!withReplacement && length > distinct.length) {
+    throw new Error(`Length of permutation ${length} must be greater than or equal to number of distinct elements ${distinct.length} if elements cannot repeat`);
   }
   let levels = new Array<Array<Array<T>>>();
-  for (let slot = 0; slot < numberOfSlots; slot++) {
+  for (let slot = 0; slot < length; slot++) {
     const level = new Array<Array<T>>();
     for (let next of elements) {
       if (slot === 0) {
@@ -90,7 +91,7 @@ export function enumeratePermutations<T>(elements: T[],
     }
     levels.push(level);
   }
-  return levels[numberOfSlots - 1];
+  return levels[length - 1];
 }
 
 export function enumerateSubsets<T>(elements: T[], allowEmptySet: boolean = true): T[][] {
@@ -123,21 +124,21 @@ export function enumerateSubsets<T>(elements: T[], allowEmptySet: boolean = true
 }
 
 export function enumerateCombinations<T>(elements: T[],
-  sizeOfCombination: number = elements.length,
+  length: number = elements.length,
   withReplacement: boolean = true): T[][] {
-  if (sizeOfCombination === 0) {
+  if (length === 0) {
     return [[]];
   }
-  if (sizeOfCombination < 0) {
-    throw new Error(`Size of combination must be greater than or equal to 0. Received ${sizeOfCombination}.`);
+  if (length < 0) {
+    throw new Error(`Length of combination must be greater than or equal to 0. Received ${length}.`);
   }
   const distinct = distinctElements(elements);
-  if (!withReplacement && sizeOfCombination > distinct.length) {
-    throw new Error(`Size of combination ${sizeOfCombination} must be greater than or equal to number of distinct elements ${distinct.length} if elements cannot repeat`);
+  if (!withReplacement && length > distinct.length) {
+    throw new Error(`Length of combination ${length} must be greater than or equal to number of distinct elements ${distinct.length} if elements cannot repeat`);
   }
 
   const levels = new Array<Array<Array<T>>>();
-  for (let pos = 0; pos < sizeOfCombination; pos++) {
+  for (let pos = 0; pos < length; pos++) {
     const level = new Array<Array<T>>();
     if (pos === 0) {
       distinct.forEach(x => level.push([x]));
@@ -155,7 +156,7 @@ export function enumerateCombinations<T>(elements: T[],
     }
     levels.push(level);
   }
-  return levels[sizeOfCombination - 1];
+  return levels[length - 1];
 }
 
 export function grayCodeOrder(length: number = 1): number[][] {
