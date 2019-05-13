@@ -1,7 +1,7 @@
 {
-  "name": "combinatorics",
+  "name": "applied-combinatorics",
   "version": "1.0.0",
-  "description": "Combinatorics library",
+  "description": "Applied combinatorics library in Typescript",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
   "scripts": {
@@ -26,8 +26,16 @@
       "core-js"
     ]
   },
-  "keywords": ["combinatorics", "typescript"],
-  "author": "Brent Velthoen",
+  "keywords": [
+    "combinatorics",
+    "typescript"
+  ],
+  "author": "Brent Velthoen <brent.velthoen@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bvelt/applied-combinatorics.git"
+  },
+  "homepage": "https://github.com/bvelt/applied-combinatorics#readme",
   "license": "MIT",
   "devDependencies": {
     "@types/jest": "^24.0.12",
